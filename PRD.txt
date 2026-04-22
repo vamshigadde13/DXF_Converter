@@ -1,0 +1,291 @@
+🏗️ PRD — Raw Data to DXF Converter (MVP)
+
+Version: 1.0
+Owner: Product Team
+Date: Nov 2025
+
+1️⃣ Product Overview
+
+Professionals in architecture, carpentry, interior design, and CNC machining often measure objects/spaces using AR tools, Unity scenes, or other systems. These tools produce raw 3D coordinates, but converting that data into a DXF CAD file requires expertise and expensive software.
+
+This MVP provides a simple web-based tool where users upload raw 3D coordinate data, and the system converts it to a clean, accurate, AutoCAD-compatible DXF file, downloadable instantly.
+
+This is the core engine of your future AR → DXF mobile app.
+
+2️⃣ MVP Goal
+🎯 Primary Objective
+
+Build a browser-only tool (no backend) that:
+
+Accepts raw 3D point data (x, y, z).
+
+Converts points to a clean 2D geometry.
+
+Generates an accurate DXF file.
+
+Lets the user download the file.
+
+This validates the hardest part of the final product:
+➡️ The geometric transformation
+➡️ The DXF export pipeline
+
+3️⃣ Target Users
+🎯 MVP Users
+
+AR developers testing ARCore/Unity scan data
+
+Architects taking measurements using AR
+
+Carpenters/CNC operators receiving point cloud data
+
+Interior designers scanning rooms
+
+You (builder) testing and validating the DXF engine
+
+🎯 Later Users
+
+(When mobile AR scanner is built)
+
+Architects, designers, carpenters
+
+CNC workshop operators
+
+Students
+
+Measurement service freelancers
+
+4️⃣ User Stories
+MVP User Stories (Core)
+
+As a user, I want to upload a file containing raw 3D points so I can convert them into CAD-friendly data.
+
+As a user, I want the system to automatically convert 3D points into clean 2D geometry.
+
+As a user, I want to download a DXF file generated from the cleaned points.
+
+As a user, I want the DXF file to open correctly in AutoCAD, ArtCAM, or Fusion360.
+
+Edge Cases
+
+If raw data is incomplete, I want the tool to show a validation error.
+
+If the format is wrong, I want the tool to show the expected format.
+
+If points are noisy, I want the converter to smooth & round automatically.
+
+5️⃣ Scope (MVP)
+IN SCOPE
+
+File upload support (.txt or .json)
+
+Parse raw x,y,z coordinates
+
+Project 3D → 2D (x, z)
+
+Convert meters → millimeters
+
+Clean decimals (round to 1 mm)
+
+Shift coordinates to origin
+
+Generate polyline with ordered points
+
+Generate DXF file (LWPOLYLINE)
+
+Download the DXF file
+
+Fully frontend, no backend
+
+OUT OF SCOPE (for MVP)
+
+AR scanning
+
+Automatic shape detection
+
+Curved edges
+
+Doors/windows
+
+Cloud storage
+
+Login/Auth
+
+iOS/Android app
+
+Multiple layers in DXF
+
+3D DXF/STL export
+
+These come later.
+
+6️⃣ Input Format Requirement
+Accepted Input (for MVP):
+[
+  { "x": 1.245, "y": 0.002, "z": -0.532 },
+  { "x": 3.812, "y": 0.004, "z": -0.519 },
+  { "x": 3.810, "y": 0.003, "z": 1.436 }
+]
+
+
+Values in meters
+
+Raw AR world coordinates
+
+y axis is height (ignored for floor)
+
+7️⃣ Core Functional Requirements
+A. Raw Data Parsing
+
+Validate JSON structure
+
+Check presence of x, y, z fields
+
+Minimum 2 points required
+
+Detect broken or empty arrays
+
+B. Geometric Transformation
+
+Convert 3D → 2D using (x, z)
+
+Convert meters → mm
+
+Remove decimals (round to nearest mm)
+
+Normalize: shift all points so first point = (0,0)
+
+Store points in order of input
+
+C. DXF Generation
+
+Generate LWPOLYLINE entity
+
+Add vertices in order
+
+Close polyline (optional toggle)
+
+Allow download as output.dxf
+
+D. UI
+
+Simple page
+
+Drag & drop or file input
+
+Display cleaned 2D points (debug table)
+
+Display success/failure messages
+
+Export DXF button
+
+8️⃣ Non-Functional Requirements
+Requirement	Target
+Accuracy	< 1 mm rounding error
+Compatibility	AutoCAD R14+ opens file
+Browser Support	Chrome, Safari, Firefox
+Performance	Convert < 200ms for 100 points
+Security	All local; no data sent to server
+Accessibility	Simple, no dependency on screen readers
+9️⃣ Success Criteria
+
+MVP is successful if:
+
+DXF opens correctly in AutoCAD/Fusion/ArtCAM
+
+Shape matches expected measurement
+
+Converts sample AR scans consistently
+
+Works offline
+
+Works in mobile browsers also (optional)
+
+🔟 Milestones
+Week 1
+
+Finalize input format
+
+Build raw → clean geometry converter
+
+Build point rounding & ordering logic
+
+Week 2
+
+Build DXF generator
+
+Validate DXF in AutoCAD/ArtCAM
+
+Full pipeline test
+
+Week 3
+
+Simple web UI
+
+Download feature
+
+Error handling
+
+Week 4
+
+Testing with sample datasets
+
+Edge-case handling
+
+Deploy on Vercel/GitHub Pages
+
+1️⃣1️⃣ Future Scope (Post-MVP)
+
+Upload multiple shapes
+
+Add dimension labels
+
+Export SVG/PDF
+
+Auto-wall detection
+
+Door/window extraction
+
+Curve/arc support
+
+3D STL export
+
+Cloud storage
+
+AI cleanup of point noise
+
+AR scanning inside the app
+
+Subscription paywall
+
+1️⃣2️⃣ Architecture (MVP)
+
+Frontend Only
+
+HTML + CSS
+
+JavaScript (ES6 modules)
+
+DXF generator (custom)
+
+Raw geometry cleaner
+
+Deployment
+
+Static hosting (Vercel/Netlify/GitHub Pages)
+
+1️⃣3️⃣ Why This MVP Works
+
+Because you’re focusing on the hardest, most valuable part:
+
+➡️ High-accuracy geometric transformation
+➡️ DXF file generation
+
+This is the “brain” of your full AR → CAD app.
+
+If this works:
+
+AR scanning becomes just a data collection step
+
+Mobile app becomes straightforward
+
+Users can already trust your accuracy
